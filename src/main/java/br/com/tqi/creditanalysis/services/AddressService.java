@@ -1,10 +1,10 @@
-package br.com.tqi.creditanalysis.service;
+package br.com.tqi.creditanalysis.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.tqi.creditanalysis.entities.Address;
-import br.com.tqi.creditanalysis.repository.AddressRepository;
+import br.com.tqi.creditanalysis.repositories.AddressRepository;
 import lombok.AllArgsConstructor;
 
 @Service
