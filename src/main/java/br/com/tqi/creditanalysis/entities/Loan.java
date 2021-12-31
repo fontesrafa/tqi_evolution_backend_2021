@@ -1,6 +1,7 @@
 package br.com.tqi.creditanalysis.entities;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -26,6 +27,10 @@ public class Loan implements Serializable {
     private Long id;
 
     private Double amount;
+
+    private LocalDate firstPaymentDate;
+
+    private Long installmentsAmount;
 
     @OneToOne
     private Client client;
