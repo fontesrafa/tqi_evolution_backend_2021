@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import br.com.tqi.creditanalysis.entities.Client;
 import br.com.tqi.creditanalysis.exceptions.ClientNotFoundException;
 import br.com.tqi.creditanalysis.repositories.ClientRepository;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class ClientService {
 
     @Autowired
