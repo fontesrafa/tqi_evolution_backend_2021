@@ -8,7 +8,7 @@ import br.com.tqi.creditanalysis.entities.Client;
 
 public interface ClientRepository extends JpaRepository<Client, Long> {
     
-    Optional<Client> findByCpf(String cpf);
+    Optional<Client> findByUsername(String username);
 }
     
 

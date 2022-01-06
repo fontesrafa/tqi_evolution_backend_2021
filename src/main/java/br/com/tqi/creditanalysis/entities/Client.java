@@ -30,7 +30,7 @@ public class Client implements Serializable {
     private String name;
     
     //@Column(nullable = false, unique = true)
-    private String email;
+    private String username;
     
     //@Column(nullable = false, unique = true)
     private String cpf;
@@ -41,11 +41,13 @@ public class Client implements Serializable {
     private Double income;
     
     private String password;
+
+    private Boolean active;
     
-    @OneToOne(cascade=CascadeType.ALL)
+    /**@OneToOne(cascade=CascadeType.ALL)
     private Address address;
     
     @OneToMany(cascade=CascadeType.ALL)
     private List<Loan> loans;
-   
+    */
 }

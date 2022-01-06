@@ -35,10 +35,10 @@ public class ClientController {
         return clientService.findById(id);
     }
 
-    @GetMapping(value = "/cpf/{cpf}")
+    /*@GetMapping(value = "/cpf/{cpf}")
     public Client findBy(@PathVariable String cpf) throws ClientNotFoundException{
         return clientService.findByCpf(cpf);
-    }
+    }*/
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

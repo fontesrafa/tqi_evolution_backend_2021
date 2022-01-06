@@ -26,12 +26,7 @@ public class ClientService {
         return clientRepository.findById(id)
                 .orElseThrow(() -> new ClientNotFoundException(id));
     }
-
-    public Client findByCpf(String cpf) throws ClientNotFoundException {
-        return clientRepository.findByCpf(cpf)
-                .orElseThrow(() -> new ClientNotFoundException(cpf));
-    }
-
+  
     public Client createClient(Client client) {
         return clientRepository.save(client);
     }

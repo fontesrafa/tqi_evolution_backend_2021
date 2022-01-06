@@ -1,30 +1,25 @@
-package br.com.tqi.creditanalysis.config;
+package br.com.tqi.creditanalysis.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private AuthUserDetailsService authUserDetailsService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         
-        auth.inMemoryAuthentication()
-                .withUser("client")
-                .password("123")
-                .roles("CLIENT")
-                .and()
-                .withUser("loan")
-                .password("123")
-                .roles("LOAN");               
+       auth.userDetailsService(authUserDetailsService);      
     }
 
     @Bean
@@ -34,11 +29,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable().authorizeRequests().antMatchers("/h2-console/**").permitAll();
         http.authorizeRequests()
-                    .antMatchers("/api/v1/clients").hasRole("CLIENT")
-                    .antMatchers("/api/v1/loans").hasAnyRole("CLIENT","LOAN")                                        
+                    .antMatchers(HttpMethod.GET,"/api/v1/clients").authenticated()
+                    .antMatchers(HttpMethod.POST,"/api/v1/clients").permitAll()
+                    .antMatchers("/h2-console/**").permitAll()
+                    .antMatchers("/api/v1/loans").authenticated()                                                          
                     .and()
-                    .formLogin();      
+                    .formLogin(); 
+        http.headers().frameOptions().sameOrigin();   
     }
     
 }
