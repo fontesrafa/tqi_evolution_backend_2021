@@ -1,5 +1,6 @@
 package br.com.tqi.creditanalysis.controllers;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.tqi.creditanalysis.controllers.exceptions.ClientNotFoundException;
+import br.com.tqi.creditanalysis.entities.Client;
 import br.com.tqi.creditanalysis.entities.Loan;
-import br.com.tqi.creditanalysis.exceptions.ClientNotFoundException;
+import br.com.tqi.creditanalysis.services.ClientService;
 import br.com.tqi.creditanalysis.services.LoanService;
 
 @RestController
@@ -22,7 +25,8 @@ import br.com.tqi.creditanalysis.services.LoanService;
 public class LoanController {
 
     @Autowired
-    public LoanService loanService;
+    private LoanService loanService;
+    private ClientService clientService;
     
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -37,7 +41,9 @@ public class LoanController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Loan applyForLoan(@RequestBody Loan loan) {
+    public Loan applyForLoan(@RequestBody Loan loan, Principal principal ) {        
+        Client client = clientService.findByUsername(principal.getName());
+        loan.setClient(client);
         return loanService.applyForLoan(loan);
     }
 

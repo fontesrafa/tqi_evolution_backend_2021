@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.tqi.creditanalysis.controllers.exceptions.ClientNotFoundException;
 import br.com.tqi.creditanalysis.entities.Client;
-import br.com.tqi.creditanalysis.exceptions.ClientNotFoundException;
 import br.com.tqi.creditanalysis.repositories.ClientRepository;
 import lombok.AllArgsConstructor;
 
@@ -19,12 +19,17 @@ public class ClientService {
 
 
     public List<Client> listAll() {
-        return clientRepository.findAll();        
+        return clientRepository.findAll();      
     }
 
     public Client findById(Long id) throws ClientNotFoundException {
         return clientRepository.findById(id)
                 .orElseThrow(() -> new ClientNotFoundException(id));
+    }
+
+    public Client findByUsername(String username) {
+        return clientRepository.findByUsername(username)
+                .orElseThrow(() -> new ClientNotFoundException(username));
     }
   
     public Client createClient(Client client) {
@@ -39,7 +44,6 @@ public class ClientService {
     private Client verifyIfExists(Long id) throws ClientNotFoundException {
         return clientRepository.findById(id)
                 .orElseThrow(() -> new ClientNotFoundException(id));
-    }
-
+    }  
 
 }

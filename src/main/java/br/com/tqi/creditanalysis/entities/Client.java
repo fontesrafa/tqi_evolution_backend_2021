@@ -44,10 +44,10 @@ public class Client implements Serializable {
 
     private Boolean active;
     
-    /**@OneToOne(cascade=CascadeType.ALL)
+    @OneToOne(cascade=CascadeType.ALL)
     private Address address;
     
     @OneToMany(cascade=CascadeType.ALL)
     private List<Loan> loans;
-    */
+    
 }

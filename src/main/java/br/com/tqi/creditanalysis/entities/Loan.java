@@ -33,7 +33,7 @@ public class Loan implements Serializable {
     private String firstPaymentDate;
 
     private Long installmentsAmount;
-
+    
     @OneToOne
     private Client client;
     

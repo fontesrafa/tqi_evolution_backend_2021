@@ -1,12 +1,13 @@
 package br.com.tqi.creditanalysis.services;
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.tqi.creditanalysis.controllers.exceptions.LoanNotFoundException;
 import br.com.tqi.creditanalysis.entities.Loan;
-import br.com.tqi.creditanalysis.exceptions.LoanNotFoundException;
 import br.com.tqi.creditanalysis.repositories.LoanRepository;
 import lombok.AllArgsConstructor;
 
