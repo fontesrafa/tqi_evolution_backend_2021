@@ -1,6 +1,7 @@
 package br.com.tqi.creditanalysis.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -10,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -47,7 +50,8 @@ public class Client implements Serializable {
     @OneToOne(cascade=CascadeType.ALL)
     private Address address;
     
-    @OneToMany(cascade=CascadeType.ALL)
-    private List<Loan> loans;
+    @JsonIgnore
+    @OneToMany(mappedBy = "client", cascade=CascadeType.ALL)
+    private List<Loan> loans = new ArrayList<>();
     
 }

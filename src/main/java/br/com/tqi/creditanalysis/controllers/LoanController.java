@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.tqi.creditanalysis.controllers.exceptions.ClientNotFoundException;
-import br.com.tqi.creditanalysis.entities.Client;
+import br.com.tqi.creditanalysis.controllers.exceptions.LoanNotFoundException;
 import br.com.tqi.creditanalysis.entities.Loan;
-import br.com.tqi.creditanalysis.services.ClientService;
 import br.com.tqi.creditanalysis.services.LoanService;
 
 @RestController
@@ -26,25 +25,22 @@ public class LoanController {
 
     @Autowired
     private LoanService loanService;
-    private ClientService clientService;
-    
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Loan> listAll() {
-        return loanService.listAll();
+    public List<Loan> listAll(Principal principal) {
+        return loanService.listAll(principal);
     }
 
     @GetMapping(value = "/{id}")
-    public Loan findById(@PathVariable Long id) throws ClientNotFoundException{
-        return loanService.findById(id);
+    public Loan findById(@PathVariable Long id, Principal principal) throws LoanNotFoundException{
+        return loanService.findById(id, principal);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Loan applyForLoan(@RequestBody Loan loan, Principal principal ) {        
-        Client client = clientService.findByUsername(principal.getName());
-        loan.setClient(client);
-        return loanService.applyForLoan(loan);
+    public Loan applyForLoan(@RequestBody Loan loan, Principal principal) {
+        return loanService.applyForLoan(loan, principal);
     }
 
     @DeleteMapping("/{id}")

@@ -2,8 +2,6 @@ package br.com.tqi.creditanalysis.controllers;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,8 +27,8 @@ public class ClientController {
     
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Client> listAll(Principal principal) {                  
-        return clientService.listAll().stream().filter(client -> Objects.equals(client.getUsername(), principal.getName())).collect(Collectors.toList());
+    public List<Client> listAll() {                  
+        return clientService.listAll();
     }
 
     @GetMapping(value = "/user")
