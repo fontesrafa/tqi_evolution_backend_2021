@@ -2,7 +2,9 @@ package br.com.tqi.creditanalysis.controllers;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.tqi.creditanalysis.controllers.exceptions.ClientNotFoundException;
 import br.com.tqi.creditanalysis.controllers.exceptions.LoanNotFoundException;
+import br.com.tqi.creditanalysis.dtos.LoanDTO;
+import br.com.tqi.creditanalysis.dtos.LoanDetailsDTO;
+import br.com.tqi.creditanalysis.dtos.LoanSummaryDTO;
 import br.com.tqi.creditanalysis.entities.Loan;
 import br.com.tqi.creditanalysis.services.LoanService;
 
@@ -26,21 +31,29 @@ public class LoanController {
     @Autowired
     private LoanService loanService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Loan> listAll(Principal principal) {
-        return loanService.listAll(principal);
+    public List<LoanSummaryDTO> listAll(Principal principal) {
+        return loanService.listAll(principal)
+                .stream()
+                .map(this::toLoanSummaryDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping(value = "/{id}")
-    public Loan findById(@PathVariable Long id, Principal principal) throws LoanNotFoundException{
-        return loanService.findById(id, principal);
+    public LoanDetailsDTO findById(@PathVariable Long id, Principal principal) throws LoanNotFoundException{
+        Loan loan = loanService.findById(id, principal);
+        return toLoanDetailsDTO(loan);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Loan applyForLoan(@RequestBody Loan loan, Principal principal) {
-        return loanService.applyForLoan(loan, principal);
+    public LoanDTO applyForLoan(@RequestBody LoanDTO loanDTO, Principal principal) {
+        Loan loan = toLoan(loanDTO);
+        return toLoanDTO(loanService.applyForLoan(loan, principal));
     }
 
     @DeleteMapping("/{id}")
@@ -49,4 +62,19 @@ public class LoanController {
         loanService.deleteById(id);        
     }
 
+    private LoanDTO toLoanDTO(Loan loan) {
+        return modelMapper.map(loan, LoanDTO.class);
+    }
+
+    private LoanSummaryDTO toLoanSummaryDTO(Loan loan) {
+        return modelMapper.map(loan, LoanSummaryDTO.class);
+    }
+
+    private LoanDetailsDTO toLoanDetailsDTO(Loan loan) {
+        return modelMapper.map(loan, LoanDetailsDTO.class);
+    }
+
+    private Loan toLoan(LoanDTO loanDTO) {
+        return modelMapper.map(loanDTO, Loan.class);
+    }
 }
