@@ -3,6 +3,8 @@ package br.com.tqi.creditanalysis.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.tqi.creditanalysis.controllers.exceptions.ClientNotFoundException;
@@ -16,6 +18,9 @@ public class ClientService {
 
     @Autowired
     public ClientRepository clientRepository;
+
+    @Autowired
+    public PasswordEncoder passwordEncoder;
 
 
     public List<Client> listAll() {
@@ -32,7 +37,8 @@ public class ClientService {
                 .orElseThrow(() -> new ClientNotFoundException(username));
     }
   
-    public Client createClient(Client client) {
+    public Client createClient(Client client) {        
+        client.setPassword(passwordEncoder.encode(client.getPassword()));
         return clientRepository.save(client);
     }
 
