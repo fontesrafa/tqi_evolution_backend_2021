@@ -1,12 +1,16 @@
 package br.com.tqi.creditanalysis.controllers;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,16 +48,33 @@ public class LoanController {
     }
 
     @GetMapping(value = "/{id}")
-    public LoanDetailsDTO findById(@PathVariable Long id, Principal principal) throws LoanNotFoundException{
+    public LoanDetailsDTO findById(@PathVariable Long id, Principal principal) throws LoanNotFoundException {
         Loan loan = loanService.findById(id, principal);
         return toLoanDetailsDTO(loan);
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public LoanDTO applyForLoan(@RequestBody LoanDTO loanDTO, Principal principal) {
-        Loan loan = toLoan(loanDTO);
-        return toLoanDTO(loanService.applyForLoan(loan, principal));
+    @PostMapping    
+    public ResponseEntity<LoanDTO> applyForLoan(@RequestBody @Valid LoanDTO loanDTO, Principal principal) {
+        
+        Loan loan = toLoan(loanDTO);        
+        
+        LocalDate now = LocalDate.now();
+        LocalDate date = LocalDate.parse(loanDTO.getFirstPaymentDate());
+        LocalDate nowPlus3Months = now.plusMonths(3); 
+        
+        System.out.println();
+        System.out.println(now);
+        System.out.println();
+        System.out.println(date);
+        System.out.println();
+        System.out.println(nowPlus3Months);
+
+        if(date.isAfter(nowPlus3Months) || date.isBefore(now)) {            
+            return ResponseEntity.badRequest().build();            
+        } else {
+            LoanDTO loanDTOResponse = toLoanDTO(loanService.applyForLoan(loan, principal));
+            return ResponseEntity.accepted().body(loanDTOResponse);
+        }        
     }
 
     @DeleteMapping("/{id}")
@@ -77,4 +98,6 @@ public class LoanController {
     private Loan toLoan(LoanDTO loanDTO) {
         return modelMapper.map(loanDTO, Loan.class);
     }
+
+    
 }

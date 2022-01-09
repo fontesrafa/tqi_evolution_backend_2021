@@ -1,6 +1,7 @@
 package br.com.tqi.creditanalysis.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -30,7 +31,7 @@ public class Loan implements Serializable {
 
     private String status;
 
-    private String firstPaymentDate;
+    private Date firstPaymentDate;
 
     private Long installmentsAmount;
     

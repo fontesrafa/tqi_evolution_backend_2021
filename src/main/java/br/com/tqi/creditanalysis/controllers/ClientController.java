@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,7 +57,7 @@ public class ClientController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ClientDTO createClient(@RequestBody ClientDTO clientDTO) {
+    public ClientDTO createClient(@RequestBody @Valid ClientDTO clientDTO) {
         Client client = toClient(clientDTO);
         return toClientDTO(clientService.createClient(client));
     }

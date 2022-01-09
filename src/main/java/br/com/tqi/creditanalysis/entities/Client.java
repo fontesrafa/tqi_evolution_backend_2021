@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,20 +30,23 @@ public class Client implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    //@Column(nullable = false)
+    @Column(nullable = false)
     private String name;
     
-    //@Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String username;
     
-    //@Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String cpf;
     
-    //@Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String rg;
     
+    @Column(nullable = false)
     private Double income;
     
+    @JsonIgnore
+    @Column(nullable = false)
     private String password;
 
     private Boolean active;

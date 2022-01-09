@@ -18,8 +18,7 @@ public class ModelMapperConfig {
             .<Double>addMapping(src -> src.getClient().getIncome(), 
                                 (dest, value) -> dest.setClientIncome(value))
             .<String>addMapping(src -> src.getClient().getUsername(), 
-                                (dest, value) -> dest.setClientEmail(value));      
-            
+                                (dest, value) -> dest.setClientEmail(value));  
         return modelMapper;
     }
 
