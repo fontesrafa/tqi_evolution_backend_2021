@@ -1,9 +1,12 @@
 package br.com.tqi.creditanalysis.dtos;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -12,7 +15,8 @@ import br.com.tqi.creditanalysis.entities.Loan;
 import lombok.Data;
 
 @Data
-public class ClientDTO {
+public class ClientDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
        
     private Long id;
     
@@ -31,7 +35,7 @@ public class ClientDTO {
     private String rg;
     
     @NotBlank
-    private Double income;
+    private Double income;    
     
     @NotBlank
     private String password;
