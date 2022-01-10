@@ -61,13 +61,6 @@ public class LoanController {
         LocalDate now = LocalDate.now();
         LocalDate date = LocalDate.parse(loanDTO.getFirstPaymentDate());
         LocalDate nowPlus3Months = now.plusMonths(3); 
-        
-        System.out.println();
-        System.out.println(now);
-        System.out.println();
-        System.out.println(date);
-        System.out.println();
-        System.out.println(nowPlus3Months);
 
         if(date.isAfter(nowPlus3Months) || date.isBefore(now)) {            
             return ResponseEntity.badRequest().build();            

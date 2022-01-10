@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,9 +37,10 @@ public class Loan implements Serializable {
 
     private Long installmentsAmount;
     
+    @JsonIgnore
     @ManyToOne
     private Client client;
-    
+    @JsonIgnore
     @OneToMany(cascade=CascadeType.ALL)
     private List<Installment> installments;
 }
