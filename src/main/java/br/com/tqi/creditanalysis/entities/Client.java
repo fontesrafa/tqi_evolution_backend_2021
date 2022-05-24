@@ -25,37 +25,37 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Client implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(nullable = false)
     private String name;
-    
+
     @Column(nullable = false, unique = true)
     private String username;
-    
+
     @Column(nullable = false, unique = true)
     private String cpf;
-    
+
     @Column(nullable = false, unique = true)
     private String rg;
-    
+
     @Column(nullable = false)
     private Double income;
-    
+
     @JsonIgnore
     @Column(nullable = false)
     private String password;
 
     private Boolean active;
-    
-    @OneToOne(cascade=CascadeType.ALL)
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
-    
+
     @JsonIgnore
-    @OneToMany(mappedBy = "client", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Loan> loans = new ArrayList<>();
-    
+
 }

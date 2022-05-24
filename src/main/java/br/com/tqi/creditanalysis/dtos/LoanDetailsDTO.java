@@ -12,12 +12,12 @@ public class LoanDetailsDTO implements Serializable {
 
     private Double amount;
 
-    private Long installmentsAmount;  
+    private Long installmentsAmount;
 
     private String firstPaymentDate;
-    
+
     private String clientEmail;
-    
+
     private Double clientIncome;
-    
+
 }

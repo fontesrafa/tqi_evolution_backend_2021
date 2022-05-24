@@ -15,11 +15,12 @@ public class AuthUserDetailsService implements UserDetailsService {
 
     @Autowired
     private ClientRepository clientRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        
+
         return new AuthUserDetails(this.clientRepository.findByUsername(username)
-                                    .orElseThrow(() -> new UsernameNotFoundException(username)));
+                .orElseThrow(() -> new UsernameNotFoundException(username)));
     }
-    
+
 }

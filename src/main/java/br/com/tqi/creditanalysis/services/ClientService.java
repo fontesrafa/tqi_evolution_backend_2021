@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.tqi.creditanalysis.controllers.exceptions.ClientNotFoundException;
 import br.com.tqi.creditanalysis.entities.Client;
 import br.com.tqi.creditanalysis.repositories.ClientRepository;
+import br.com.tqi.creditanalysis.services.exceptions.ClientNotFoundException;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -24,9 +24,8 @@ public class ClientService {
     @Autowired
     public PasswordEncoder passwordEncoder;
 
-
     public List<Client> listAll() {
-        return clientRepository.findAll();      
+        return clientRepository.findAll();
     }
 
     public Client findById(Long id) throws ClientNotFoundException {
@@ -38,9 +37,9 @@ public class ClientService {
         return clientRepository.findByUsername(username)
                 .orElseThrow(() -> new ClientNotFoundException(username));
     }
-  
+
     public Client createClient(Client client) {
-        client.setAddress(addressService.createAddress(client.getAddress()));     
+        client.setAddress(addressService.createAddress(client.getAddress()));
         client.setPassword(passwordEncoder.encode(client.getPassword()));
         return clientRepository.save(client);
     }
@@ -53,6 +52,6 @@ public class ClientService {
     private Client verifyIfExists(Long id) throws ClientNotFoundException {
         return clientRepository.findById(id)
                 .orElseThrow(() -> new ClientNotFoundException(id));
-    }  
+    }
 
 }

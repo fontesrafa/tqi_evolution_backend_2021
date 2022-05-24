@@ -1,4 +1,4 @@
-package br.com.tqi.creditanalysis.controllers;
+package br.com.tqi.creditanalysis.resources;
 
 import java.security.Principal;
 import java.util.List;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.tqi.creditanalysis.controllers.exceptions.ClientNotFoundException;
 import br.com.tqi.creditanalysis.dtos.ClientDTO;
 import br.com.tqi.creditanalysis.entities.Client;
 import br.com.tqi.creditanalysis.services.ClientService;
+import br.com.tqi.creditanalysis.services.exceptions.ClientNotFoundException;
 
 @RestController
 @RequestMapping("/api/v1/clients")
@@ -32,10 +32,10 @@ public class ClientController {
 
     @Autowired
     private ModelMapper modelMapper;
-    
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ClientDTO> listAll() { 
+    public List<ClientDTO> listAll() {
         return clientService.listAll()
                 .stream()
                 .map(this::toClientDTO)
@@ -46,8 +46,7 @@ public class ClientController {
     @ResponseStatus(HttpStatus.OK)
     public Principal showLogedUser(Principal principal) {
         return principal;
-    } 
-
+    }
 
     @GetMapping(value = "/{id}")
     public ClientDTO findById(@PathVariable Long id) throws ClientNotFoundException {
@@ -65,7 +64,7 @@ public class ClientController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) throws ClientNotFoundException {
-        clientService.deleteById(id);        
+        clientService.deleteById(id);
     }
 
     private ClientDTO toClientDTO(Client client) {

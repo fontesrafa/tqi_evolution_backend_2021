@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class LoanSummaryDTO {
-    
+
     private Long id;
 
     private Double amount;
 
-    private Long installmentsAmount;   
-   
+    private Long installmentsAmount;
+
 }

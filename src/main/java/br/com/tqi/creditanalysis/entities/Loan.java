@@ -36,11 +36,11 @@ public class Loan implements Serializable {
     private Date firstPaymentDate;
 
     private Long installmentsAmount;
-    
+
     @JsonIgnore
     @ManyToOne
     private Client client;
     @JsonIgnore
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Installment> installments;
 }

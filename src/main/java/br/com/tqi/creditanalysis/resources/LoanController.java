@@ -1,4 +1,4 @@
-package br.com.tqi.creditanalysis.controllers;
+package br.com.tqi.creditanalysis.resources;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.tqi.creditanalysis.controllers.exceptions.ClientNotFoundException;
-import br.com.tqi.creditanalysis.controllers.exceptions.LoanNotFoundException;
 import br.com.tqi.creditanalysis.dtos.LoanDTO;
 import br.com.tqi.creditanalysis.dtos.LoanDetailsDTO;
 import br.com.tqi.creditanalysis.dtos.LoanSummaryDTO;
 import br.com.tqi.creditanalysis.entities.Loan;
 import br.com.tqi.creditanalysis.services.LoanService;
+import br.com.tqi.creditanalysis.services.exceptions.ClientNotFoundException;
+import br.com.tqi.creditanalysis.services.exceptions.LoanNotFoundException;
 
 @RestController
 @RequestMapping("/api/v1/loans")
@@ -53,27 +53,27 @@ public class LoanController {
         return toLoanDetailsDTO(loan);
     }
 
-    @PostMapping    
+    @PostMapping
     public ResponseEntity<LoanDTO> applyForLoan(@RequestBody @Valid LoanDTO loanDTO, Principal principal) {
-        
-        Loan loan = toLoan(loanDTO);        
-        
+
+        Loan loan = toLoan(loanDTO);
+
         LocalDate now = LocalDate.now();
         LocalDate date = LocalDate.parse(loanDTO.getFirstPaymentDate());
-        LocalDate nowPlus3Months = now.plusMonths(3); 
+        LocalDate nowPlus3Months = now.plusMonths(3);
 
-        if(date.isAfter(nowPlus3Months) || date.isBefore(now)) {            
-            return ResponseEntity.badRequest().build();            
+        if (date.isAfter(nowPlus3Months) || date.isBefore(now)) {
+            return ResponseEntity.badRequest().build();
         } else {
             LoanDTO loanDTOResponse = toLoanDTO(loanService.applyForLoan(loan, principal));
             return ResponseEntity.accepted().body(loanDTOResponse);
-        }        
+        }
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) throws ClientNotFoundException {
-        loanService.deleteById(id);        
+        loanService.deleteById(id);
     }
 
     private LoanDTO toLoanDTO(Loan loan) {
@@ -92,5 +92,4 @@ public class LoanController {
         return modelMapper.map(loanDTO, Loan.class);
     }
 
-    
 }

@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class AddressService {
-    
+
     @Autowired
     private AddressRepository addressRepository;
 

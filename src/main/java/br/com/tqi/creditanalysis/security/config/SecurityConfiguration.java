@@ -18,29 +18,29 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private PasswordEncoder passwordEnconder;
-    
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        
-       auth.userDetailsService(authUserDetailsService).passwordEncoder(passwordEnconder);      
+
+        auth.userDetailsService(authUserDetailsService).passwordEncoder(passwordEnconder);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests().antMatchers("/h2-console/**").permitAll();
         http.authorizeRequests()
-                    .antMatchers(HttpMethod.GET,"/api/v1/clients/**").authenticated()                    
-                    .antMatchers(HttpMethod.POST,"/api/v1/clients").permitAll()
-                    .antMatchers("/api/v1/address/**").authenticated()                    
-                    .antMatchers("/api/v1/loans**").authenticated()
-                    .antMatchers("/h2-console/**").permitAll()                                                          
-                    .and()
-                    .formLogin()
-                    .and()
-                    .httpBasic()
-                    .and()
-                    .logout();                    
-        http.headers().frameOptions().sameOrigin();   
+                .antMatchers(HttpMethod.GET, "/api/v1/clients/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/v1/clients").permitAll()
+                .antMatchers("/api/v1/address/**").authenticated()
+                .antMatchers("/api/v1/loans**").authenticated()
+                .antMatchers("/h2-console/**").permitAll()
+                .and()
+                .formLogin()
+                .and()
+                .httpBasic()
+                .and()
+                .logout();
+        http.headers().frameOptions().sameOrigin();
     }
-    
+
 }
