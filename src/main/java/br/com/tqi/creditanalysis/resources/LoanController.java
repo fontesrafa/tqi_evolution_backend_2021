@@ -1,7 +1,6 @@
 package br.com.tqi.creditanalysis.resources;
 
 import java.security.Principal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,19 +54,10 @@ public class LoanController {
 
     @PostMapping
     public ResponseEntity<LoanDTO> applyForLoan(@RequestBody @Valid LoanDTO loanDTO, Principal principal) {
-
         Loan loan = toLoan(loanDTO);
 
-        LocalDate now = LocalDate.now();
-        LocalDate date = LocalDate.parse(loanDTO.getFirstPaymentDate());
-        LocalDate nowPlus3Months = now.plusMonths(3);
-
-        if (date.isAfter(nowPlus3Months) || date.isBefore(now)) {
-            return ResponseEntity.badRequest().build();
-        } else {
-            LoanDTO loanDTOResponse = toLoanDTO(loanService.applyForLoan(loan, principal));
-            return ResponseEntity.accepted().body(loanDTOResponse);
-        }
+        LoanDTO loanDTOResponse = toLoanDTO(loanService.applyForLoan(loan, principal));
+        return ResponseEntity.accepted().body(loanDTOResponse);
     }
 
     @DeleteMapping("/{id}")

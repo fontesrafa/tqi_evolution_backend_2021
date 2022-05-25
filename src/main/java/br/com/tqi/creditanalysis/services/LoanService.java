@@ -1,6 +1,8 @@
 package br.com.tqi.creditanalysis.services;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +15,7 @@ import br.com.tqi.creditanalysis.repositories.ClientRepository;
 import br.com.tqi.creditanalysis.repositories.LoanRepository;
 import br.com.tqi.creditanalysis.services.exceptions.ClientNotFoundException;
 import br.com.tqi.creditanalysis.services.exceptions.LoanNotFoundException;
+import br.com.tqi.creditanalysis.services.exceptions.LoansDateNotElegibleException;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -26,6 +29,13 @@ public class LoanService {
     private ClientRepository clientRepository;
 
     public Loan applyForLoan(Loan loan, Principal principal) throws ClientNotFoundException {
+        LocalDate now = LocalDate.now();
+        LocalDate date = loan.getFirstPaymentDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate nowPlus3Months = now.plusMonths(3);
+
+        if (date.isAfter(nowPlus3Months) || date.isBefore(now)) {
+            throw new LoansDateNotElegibleException();
+        }
         Client client = clientRepository.findByUsername(principal.getName())
                 .orElseThrow(() -> new ClientNotFoundException(principal.getName()));
         loan.setClient(client);
@@ -49,7 +59,7 @@ public class LoanService {
         loanRepository.deleteById(id);
     }
 
-    private Loan verifyIfExists(Long id) throws LoanNotFoundException {
+    private Loan verifyIfExists(Long id) throws LoansDateNotElegibleException {
         return loanRepository.findById(id)
                 .orElseThrow(() -> new LoanNotFoundException(id));
     }
