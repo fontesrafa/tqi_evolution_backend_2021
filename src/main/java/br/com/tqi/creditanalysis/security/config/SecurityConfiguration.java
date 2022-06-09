@@ -27,13 +27,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests().antMatchers("/h2-console/**").permitAll();
+        http.csrf().disable().authorizeRequests().antMatchers("/h2-console/**").permitAll();        
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/v1/clients/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/v1/clients").permitAll()
                 .antMatchers("/api/v1/address/**").authenticated()
                 .antMatchers("/api/v1/loans**").authenticated()
                 .antMatchers("/h2-console/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/swagger-ui**").permitAll()
+                .antMatchers("/spring-security-rest/api/v2/api-docs*").permitAll()
                 .and()
                 .formLogin()
                 .and()
