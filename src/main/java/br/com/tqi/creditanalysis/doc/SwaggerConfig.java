@@ -19,43 +19,34 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
+    private Contact contact() {
+        return new Contact("Rafael Fontes",
+                "https://github.com/fontesrafa",
+                "rafaelfontes777@hotmail.com");
+    }
+
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("Credit Analysis")
+                .description("Credit Analysis API for loan applications.")
+                .version("1.0")
+                .termsOfServiceUrl("Terms of use: OpenSource")
+                .license("Apache 2.0")
+                .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0")
+                .contact(this.contact())
+                .build();
+    }
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-          .select()
-          .apis(RequestHandlerSelectors.any())
-          .paths(PathSelectors.any())
-          .build();
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("br.com.tqi.creditanalysis.resources"))
+                .paths(PathSelectors.any())
+                .build()
+                .consumes(new HashSet<>(Arrays.asList("application/json")))
+                .produces(new HashSet<>(Arrays.asList("application/json")))
+                .pathMapping("/");
     }
-    // private Contact contact() {
-    //     return new Contact("Rafael Fontes",
-    //             "https://github.com/fontesrafa",
-    //             "rafaelfontes777@hotmail.com");
-    // }
-
-    // private ApiInfo apiInfo() {
-    //     return new ApiInfoBuilder()
-    //             .title("Credit Analysis")
-    //             .description("API for Credit Anaplysis for loan applications.")
-    //             .version("1.0")
-    //             .termsOfServiceUrl("Terms of use: OpenSource")
-    //             .license("Licença - Rafael Fontes")
-    //             .licenseUrl("https://github.com/fontesrafa")
-    //             .contact(this.contact())
-    //             .build();
-
-    // }
-
-    // @Bean
-    // public Docket api() {
-    //     return new Docket(DocumentationType.SWAGGER_2)
-    //             .apiInfo(apiInfo())
-    //             .select()
-    //             .apis(RequestHandlerSelectors.any())
-    //             .paths(PathSelectors.any())
-    //             .build()
-    //             .consumes(new HashSet<>(Arrays.asList("application/json")))
-    //             .produces(new HashSet<>(Arrays.asList("application/json")))
-    //             .pathMapping("/");
-    // }
 }

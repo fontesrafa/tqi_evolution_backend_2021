@@ -22,6 +22,7 @@ import br.com.tqi.creditanalysis.dtos.ClientDTO;
 import br.com.tqi.creditanalysis.entities.Client;
 import br.com.tqi.creditanalysis.services.ClientService;
 import br.com.tqi.creditanalysis.services.exceptions.ClientNotFoundException;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api/v1/clients")
@@ -35,6 +36,7 @@ public class ClientController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "List all clients", notes = "List all clients of database", response = ClientDTO.class, responseContainer = "List")
     public List<ClientDTO> listAll() {
         return clientService.listAll()
                 .stream()
@@ -44,11 +46,13 @@ public class ClientController {
 
     @GetMapping(value = "/user")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Show the logged user", notes = "Show the logged user (Principal)", response = Principal.class)
     public Principal showLogedUser(Principal principal) {
         return principal;
     }
 
     @GetMapping(value = "/{id}")
+    @ApiOperation(value = "Search and return the client by Id", notes = "Search and return the client by Id", response = ClientDTO.class)
     public ClientDTO findById(@PathVariable Long id) throws ClientNotFoundException {
         Client client = clientService.findById(id);
         return toClientDTO(client);
@@ -56,6 +60,7 @@ public class ClientController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create a client on database", notes = "Create a client on database", response = ClientDTO.class)
     public ClientDTO createClient(@RequestBody @Valid ClientDTO clientDTO) {
         Client client = toClient(clientDTO);
         return toClientDTO(clientService.createClient(client));
@@ -63,6 +68,7 @@ public class ClientController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Delete a client from database by Id", notes = "Search a client on database by Id and delete it")
     public void deleteById(@PathVariable Long id) throws ClientNotFoundException {
         clientService.deleteById(id);
     }

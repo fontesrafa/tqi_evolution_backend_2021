@@ -26,6 +26,7 @@ import br.com.tqi.creditanalysis.entities.Loan;
 import br.com.tqi.creditanalysis.services.LoanService;
 import br.com.tqi.creditanalysis.services.exceptions.ClientNotFoundException;
 import br.com.tqi.creditanalysis.services.exceptions.LoanNotFoundException;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api/v1/loans")
@@ -39,6 +40,7 @@ public class LoanController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "List all loans applies", notes = "List all loans applies of logged client", response = LoanDTO.class, responseContainer = "List")
     public List<LoanSummaryDTO> listAll(Principal principal) {
         return loanService.listAll(principal)
                 .stream()
@@ -47,12 +49,14 @@ public class LoanController {
     }
 
     @GetMapping(value = "/{id}")
+    @ApiOperation(value = "Search and return the loan by Id", notes = "Search and return the loan by Id", response = LoanDTO.class)
     public LoanDetailsDTO findById(@PathVariable Long id, Principal principal) throws LoanNotFoundException {
         Loan loan = loanService.findById(id, principal);
         return toLoanDetailsDTO(loan);
     }
 
     @PostMapping
+    @ApiOperation(value = "Create a loan apply on database", notes = "Create a loan apply on database", response = LoanDTO.class)
     public ResponseEntity<LoanDTO> applyForLoan(@RequestBody @Valid LoanDTO loanDTO, Principal principal) {
         Loan loan = toLoan(loanDTO);
 
@@ -62,6 +66,7 @@ public class LoanController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Delete a loan from database by Id", notes = "Search a loan on database by Id and delete it")
     public void deleteById(@PathVariable Long id) throws ClientNotFoundException {
         loanService.deleteById(id);
     }
